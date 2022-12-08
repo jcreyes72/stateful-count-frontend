@@ -1,0 +1,18 @@
+{
+  "name": "stateful-counter-redo",
+  "version": "1.0.0",
+  "description": "This counter retains the state of its previous value upon refreshing. I am doing this project over again because I screwed up the last one and my lack of git knowledge at the moment kept me from being able to reset it correctly 😔",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.2.1",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.0",
+    "morgan": "^1.10.0"
+  }
+}
