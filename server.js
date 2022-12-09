@@ -7,6 +7,20 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+
+// Mongoose connection
+
+mongoose.set('strictQuery', false);
+
+mongoose.connect(MONGODB_URI || 'mongodb://localhost/stateful_count', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+mongoose.connection.on('connected', () => {
+    console.log("Mongoose is connected");
+})
+
+
 // HTTP request logger
 app.use(morgan('tiny'));
 
