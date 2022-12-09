@@ -7,12 +7,13 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+const routes = require('./routes/api')
+
 
 // Mongoose connection
-
 mongoose.set('strictQuery', false);
 
-mongoose.connect(MONGODB_URI || 'mongodb://localhost/stateful_count', {
+mongoose.connect('mongodb://localhost/stateful_count', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -23,12 +24,8 @@ mongoose.connection.on('connected', () => {
 
 // HTTP request logger
 app.use(morgan('tiny'));
+app.use('/', routes)
 
-app.get('', (req, res) => {
-    const data = {
-        state: 0
-    };
-    res.json(data);
-})
+
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`))
