@@ -12,39 +12,21 @@ export default class Counter extends React.Component {
     }
   } 
 
-  // Here I have two separate submit functions, which depend on whether the "increment" or "decrement" button
-  // has been pressed. The reason is because I need to keep track of what the count is AFTER the button has
-  // been pressed. So if the count is 0, and decrement gets pressed, we need to store -1. But if the 
-  // count is 0, and increment is pressed, we need to store 1. The only difference between these
-  // two functions is the payload. One sets currentCount to the state minus 1, the other plus 1. This is a
-  // pretty inefficient way to handle this, and it could probably be done using a single function, but I
-  // dont know how at the moment, so I did this.
-  incrementSubmit = (event) => {
+  submit = (plusOrMinus) => {
 
-    const payload = {
-      currentCount: this.state.currentCount+1
-    };
+    var payload
 
-    axios({
-      url: 'http://localhost:8080',
-      method: 'POST',
-      data: payload
-    })
-
-    .then(() => {
-      console.log('Data has been sent to the server')
-    })
-    .catch(() => {
-      console.log('Internal Server Error')
-    })
-
-  };
-
-  decrementSubmit = (event) => {
-
-    const payload = {
-      currentCount: this.state.currentCount-1
-    };
+    // Our payload is determined by which button is pressed
+    if (plusOrMinus === "plus"){
+      payload = {
+        currentCount: this.state.currentCount+1
+      };
+    }
+    else {
+      payload = {
+        currentCount: this.state.currentCount-1
+      };
+    }
 
     axios({
       url: 'http://localhost:8080',
@@ -61,21 +43,21 @@ export default class Counter extends React.Component {
 
   };
 
-  increment = (event) => {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.log(clickedId);
+
+  increment = () => {
+    const plusOrMinus = "plus"
     this.setState({
       currentCount: this.state.currentCount + 1
     });
-    this.incrementSubmit(clickedId);
+    this.submit(plusOrMinus);
   }
 
   decrement = () => {
+    const plusOrMinus = "minus"
     this.setState({
       currentCount: this.state.currentCount - 1
     });
-    this.decrementSubmit();
+    this.submit(plusOrMinus);
   }
 
 
