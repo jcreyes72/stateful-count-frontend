@@ -19,7 +19,7 @@ router.get('', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log('Value: ', req.currentCount);
+    console.log('Value: ', req.body.currentCount);
     res.json({
         msg: "We have received your data!!"
     });
