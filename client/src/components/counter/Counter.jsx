@@ -8,13 +8,32 @@ export default class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        currentCount: 0
+        currentCount: 0,
+        everyState: []
     }
   } 
 
+  componentDidMount = () => {
+    this.getCurrentState();
+  };
+  
+  getCurrentState = () => {
+    axios.get('http://localhost:8080/')
+      .then((response) => {
+        const data = response.data;
+        this.setState({everyState: data})
+        console.log("Got the data: ");
+      })
+      .catch(() => {
+        alert('Error retrieving data');
+      });
+  }
+
+
+
   submit = (plusOrMinus) => {
 
-    var payload
+    var payload;
 
     // Our payload is determined by which button is pressed
     if (plusOrMinus === "plus"){
