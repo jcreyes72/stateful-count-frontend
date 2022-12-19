@@ -8,10 +8,11 @@ export default class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        currentCount: 0,
-        everyState: []
+      currentCount: 0,
+      everyState: [],
+      error: false, // Add a flag to indicate if an error has occurred
     }
-  } 
+  }
 
   componentDidMount = () => {
     this.getCurrentState();
@@ -19,17 +20,24 @@ export default class Counter extends React.Component {
   
   getCurrentState = () => {
     axios.get('http://localhost:8080/')
-      .then((response) => {
+      .then(response => {
         const data = response.data;
-        this.setState({everyState: data})
-        console.log("Got the data: ");
+        this.setState({ everyState: data, error: false }) // Set the error flag to false
+        this.setState({ currentCount: this.state.everyState[this.state.everyState.length - 1].state })
       })
       .catch(() => {
-        alert('Error retrieving data');
+        this.setState({ error: true })
+        console.log('Error retrieving data');
       });
   }
 
-
+  // Add a new lifecycle method to retry the data fetch if an error has occurred
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.error !== this.state.error && this.state.error === true) {
+    this.getCurrentState();
+  }
+}
+  
 
   submit = (plusOrMinus) => {
 
