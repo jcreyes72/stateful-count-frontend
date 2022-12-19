@@ -8,7 +8,7 @@ export default class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCount: 0,
+      currentCount: '',
       everyState: [],
       error: false, // Add a flag to indicate if an error has occurred
     }
@@ -19,17 +19,17 @@ export default class Counter extends React.Component {
   };
   
   getCurrentState = () => {
-    axios.get('http://localhost:8080/')
+    axios.get('http://localhost:8080/update')  
       .then(response => {
         const data = response.data;
-        this.setState({ everyState: data, error: false }) // Set the error flag to false
+        this.setState({ everyState: data, error: false })
         this.setState({ currentCount: this.state.everyState[this.state.everyState.length - 1].state })
       })
       .catch(() => {
         this.setState({ error: true })
         console.log('Error retrieving data');
       });
-  }
+  };  
 
   // Add a new lifecycle method to retry the data fetch if an error has occurred
 componentDidUpdate(prevProps, prevState) {
@@ -39,36 +39,34 @@ componentDidUpdate(prevProps, prevState) {
 }
   
 
-  submit = (plusOrMinus) => {
+submit = (plusOrMinus) => {
+  var payload;
 
-    var payload;
+  if (plusOrMinus === "plus"){
+    payload = {
+      currentCount: this.state.currentCount+1
+    };
+  }
+  else {
+    payload = {
+      currentCount: this.state.currentCount-1
+    };
+  }
 
-    // Our payload is determined by which button is pressed
-    if (plusOrMinus === "plus"){
-      payload = {
-        currentCount: this.state.currentCount+1
-      };
-    }
-    else {
-      payload = {
-        currentCount: this.state.currentCount-1
-      };
-    }
+  axios({
+    url: 'http://localhost:8080/update',  
+    method: 'PUT',  // Use a PUT request to update the count
+    data: payload
+  })
 
-    axios({
-      url: 'http://localhost:8080',
-      method: 'POST',
-      data: payload
-    })
+  .then(() => {
+    console.log('Count has been updated on the server')
+  })
+  .catch(() => {
+    console.log('Error updating count on the server')
+  })
+};
 
-    .then(() => {
-      console.log('Data has been sent to the server')
-    })
-    .catch(() => {
-      console.log('Internal Server Error')
-    })
-
-  };
 
 
   increment = () => {

@@ -19,7 +19,7 @@ const corsOptions ={
 // Mongoose connection
 mongoose.set('strictQuery', false);
 
-mongoose.connect('mongodb://localhost/stateful_count', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/stateful_count', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -35,6 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(morgan('tiny'));
 app.use('/', routes)
+
+
 
 
 
