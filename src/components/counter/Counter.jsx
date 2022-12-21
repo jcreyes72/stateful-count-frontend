@@ -20,7 +20,7 @@ export default class Counter extends React.Component {
   };
   
   getCurrentState = () => {
-    axios.get('https://statefulcount-back.onrender.com/api')  
+    axios.get('https://statefulcount-back.onrender.com')  
       .then(response => {
         const data = response.data;
         this.setState({ everyState: data, error: false })
